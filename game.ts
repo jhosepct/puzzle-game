@@ -209,3 +209,9 @@ class PuzzleTs {
     return this.win;
   }
 }
+
+let gameTs: PuzzleTs;
+var board = document.getElementById("board") as HTMLElement;
+let image = document.getElementById("image") as HTMLElement;
+gameTs = new PuzzleTs(3 , board, image);
+game.start();
