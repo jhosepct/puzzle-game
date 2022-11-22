@@ -4,6 +4,7 @@ class Puzzle {
     this.board = document.getElementById("board");
     this.image = document.getElementById("image");
     this.movesCounter = document.getElementById("moves");
+    this.button = document.getElementById("button");
     this.randomValues = [];
     this.boardValues = [];
     this.array = [];
@@ -12,6 +13,7 @@ class Puzzle {
   }
 
   start() {
+    this.button.disabled = true;
     this.array = this.arrayBidimensional(this.dimension);
     this.board.style.gridTemplateColumns = `repeat(${this.dimension}, 1fr)`;
 
@@ -157,6 +159,16 @@ class Puzzle {
     }
   }
 
+  addBackgroundImageComplete() {
+    for (let i = 0; i < this.array.length; i++) {
+      for (let j = 0; j < this.array.length; j++) {
+        this.array[i][
+          j
+        ].style.backgroundImage = `url("images/image${this.dimension}-${this.array[i][j].innerHTML}.jpg")`;
+      }
+    }
+  }
+
   ArrayValues(newArray) {
     let arrayCopy = this.arrayBidimensional(this.array.length);
     let ind = 0;
@@ -190,16 +202,34 @@ class Puzzle {
 
         this.createBoard(this.boardValues);
         this.introduceBoard();
-        if (this.validate_win()) {
+        if (this.validate_win() && this.dimension <= 4) {
+          this.addBackgroundImageComplete();
           this.win = true;
-          this.board.style.display = "none";
-          this.image.style.width = "400px";
-          this.image.style.height = "400px";
+          this.image.style.display = "none";
+          this.board.style.gap = "0px";
+          this.button.style.display = "block";
+
+          this.button.disabled = false;
+
+          this.dimension += 1;
+          this.button.addEventListener("click", (e) => {
+            e.preventDefault();
+            this.nextLevel();
+          });
         } else {
           this.game();
         }
       });
     });
+  }
+
+  nextLevel() {
+    this.image.style.display = "block";
+    this.board.innerHTML = "";
+    this.board.style.display = "grid";
+    this.moves = 0;
+    this.win = false;
+    this.start();
   }
 }
 
